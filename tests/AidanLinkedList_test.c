@@ -251,12 +251,12 @@ int testIterate() {
 
 int main(){
 	Tests_set ts = {__FILE__};
-	register_test(&ts, &(Test){testPush});
-	register_test(&ts, &(Test){testReserve});
-	register_test(&ts, &(Test){testPop});
-	register_test(&ts, &(Test){testCollectGarbage});
-	register_test(&ts, &(Test){testIterate});
-	register_test(&ts, &(Test){testTypes});
+	reg_test(ts, testPush);
+	reg_test(ts, testReserve);
+	reg_test(ts, testPop);
+	reg_test(ts, testCollectGarbage);
+	reg_test(ts, testIterate);
+	reg_test(ts, testTypes);
 	run_tests(&ts);
 	return EXIT_SUCCESS;
 }
