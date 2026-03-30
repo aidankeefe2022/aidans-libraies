@@ -39,3 +39,9 @@ ARENA_STATUS aid_arena_clear(struct aid_arena arena[static 1]) {
     arena->currentPointer = arena->buffer;
     return ARENA_OK;
 }
+
+ARENA_STATUS aid_arena_free(struct aid_arena arena[static 1]) {
+    free(arena->buffer);
+    free(arena);
+    return ARENA_OK;
+}

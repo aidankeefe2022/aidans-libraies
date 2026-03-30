@@ -43,6 +43,8 @@ test_err run_tests(Tests_set *ts);
 #define TESTING_IMPLIMENTED
 
 
+#define reg_test(ts, func) register_test(&ts, &(Test){func});
+
 test_err register_test(Tests_set* ts ,Test* test) {
     if (!ts)
         return UNABLE_TO_REGISTER;

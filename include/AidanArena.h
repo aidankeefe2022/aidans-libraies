@@ -34,11 +34,13 @@ typedef struct aid_arena{
 Arena* aid_create_arena(size_t size_in_bytes);
 void* aid_arena_alloc(Arena arena[static 1], size_t size, const size_t alignment);
 ARENA_STATUS aid_arena_clear(Arena arena[static 1]);
+ARENA_STATUS aid_arena_free(Arena arena[static 1]);
 
 #ifdef AIDAN_SHORT_NAMES
     Arena*(*arena_create)(size_t) = aid_create_arena;
     void* (*arena_alloc)(Arena*, size_t , const size_t) = aid_arena_alloc;
     ARENA_STATUS (*arena_clear) (Arena*) = aid_arena_clear;
+    ARENA_STATUS (*arena_free) (Arena*) = aid_arena_free;
 #endif
 
 #undef Arena
