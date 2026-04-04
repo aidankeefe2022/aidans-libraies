@@ -11,48 +11,16 @@ int testPush(){
 	u64 i = 4;
 	aid_push(&ll, &i, U64);
 	t_assert(ll.size == 1)
-	t_assert(ll.cap == 1)
 	t_assert(ll.head->U64 == 4);
 	t_assert(ll.tail->U64 == 4);
 	t_assert(ll.head == ll.tail);
 
-	aid_push(&ll, &i, 0);
+	aid_push(&ll, &i, U64);
 
 	t_assert(ll.size == 2)
-	t_assert(ll.cap == 2)
 	t_assert(ll.head->U64 == 4);
 	t_assert(ll.tail->U64 == 4);
 	t_assert(ll.head != ll.tail);
-
-    aid_free_LL(&ll);
-	return 0;
-}
-
-int testReserve(){
-	LinkedList ll = {0};
-	aid_reserve(&ll, 6);
-	t_assert(ll.cap == 6);
-	t_assert(ll.head);
-	t_assert(ll.tail);
-    aid_free_LL(&ll);
-	return 0;
-}
-
-
-int testReservePush() {
-	LinkedList ll = {0};
-	aid_reserve(&ll, 6);
-	t_assert(ll.cap == 6);
-	t_assert(ll.head);
-	t_assert(ll.tail);
-
-	u64 i = 3;
-	aid_push(&ll, &i, U64);
-	aid_push(&ll, &i, 0);
-
-	t_assert(ll.size == 2);
-	t_assert(ll.cap == 6);
-
 
     aid_free_LL(&ll);
 	return 0;
@@ -66,7 +34,6 @@ int testPop() {
 	t_assert(x == 3);
 	t_assert(!ll.tail);
 	t_assert(ll.size == 0);
-	t_assert(ll.cap == 0);
 
     aid_free_LL(&ll);
 	return 0;
@@ -197,7 +164,7 @@ int test_mixed_types_fail(void) {
     i64 y = -5;
 
     t_assert(aid_push(&ll, &x, U64) == true);
-    t_assert(aid_push(&ll, &y, I64) == false);
+    t_assert(aid_push(&ll, &y, I64) == true);
 
     aid_free_LL(&ll);
     return 0;
@@ -222,12 +189,12 @@ int testCollectGarbage() {
 	t_assert(x == 3);
 	t_assert(!ll.tail);
 	t_assert(ll.size == 0);
-	t_assert(ll.cap == 0);
+
 
 	t_assert(ll.LOST_NODES);
 	t_assert(aid_collect_garbage(&ll));
 	t_assert(!ll.LOST_NODES);
-
+	aid_free_LL(&ll);
 	return 0;
 }
 
@@ -252,7 +219,6 @@ int testIterate() {
 int main(){
 	Tests_set ts = {__FILE__};
 	reg_test(ts, testPush);
-	reg_test(ts, testReserve);
 	reg_test(ts, testPop);
 	reg_test(ts, testCollectGarbage);
 	reg_test(ts, testIterate);

@@ -9,54 +9,9 @@
 #include <stdarg.h>
 #include <assert.h>
 
-struct aid_LinkedList{
-    enum aid_LLtype type;
-    u64 size;
-    u64 cap;
-    struct aid_LLNode* head;
-    struct aid_LLNode* tail;
-    u64 num_lost_nodes;
-    struct aid_LLNode* LOST_NODES;
-};
-
-struct aid_LLNode{
-    union {
-        f32 F32;
-        f64 F64;
-        i64 I64;
-        u64 U64;
-        struct aid_string* STRING;
-        void* VOIDPTR;
-    };
-    struct aid_LLNode* next;
-    struct aid_LLNode* prev;
-    bool not_allocated;
-};
-
-bool aid_reserve(struct aid_LinkedList* ll, u64 size){
-    struct aid_LLNode* newNodeList = calloc(sizeof(*newNodeList), size);
-    if (!newNodeList){
-        return false;
-    }
-    if (ll->size == 0) {
-        ll->head = newNodeList;
-        ll->tail = newNodeList;
-    }else {
-        ll->tail->next = newNodeList;
-    }
-    ll->cap += size;
-    struct aid_LLNode* temp = newNodeList;
-    while(size > 1){
-        temp = newNodeList;
-        newNodeList++;
-        temp->next = newNodeList;
-        newNodeList->not_allocated = true;
-        size--;
-    }
-    return true;
-}
 
 static void assign_value(struct aid_LLNode* node, void* val, enum aid_LLtype type){
+    node->type = type;
     switch(type){
         case F32:
             node->F32 = *(f32*)val;
@@ -82,41 +37,25 @@ static void assign_value(struct aid_LLNode* node, void* val, enum aid_LLtype typ
 }
 
 bool aid_push(struct aid_LinkedList* ll, void* val, enum aid_LLtype type){
-    if(ll->type == NOT_INIT){
-        assert(type);
-        ll->type = type;
-    }
-    if (ll->type != type && type){
-        return false;
-    }
-
-    if (ll->cap > ll->size){
-        assign_value(ll->tail->next, val, ll->type);
-        ll->tail = ll->tail->next;
-        ll->size++;
-        return true;
-    }
     if(ll->size){
         struct aid_LLNode* newNode = calloc(1, sizeof(*newNode));
         if (!newNode)
             return false;
-        assign_value(newNode, val, ll->type);
+        assign_value(newNode, val, type);
         ll->tail->next = newNode;
         newNode->prev = ll->tail;
         ll->tail = ll->tail->next;
         ll->size++;
-        ll->cap++;
         return true;
     }
     if(ll->size == 0){
         struct aid_LLNode* newNode = calloc(1, sizeof(*newNode));
         if (!newNode)
             return false;
-        assign_value(newNode, val, ll->type);
+        assign_value(newNode, val, type);
         ll->head = newNode;
         ll->tail = newNode;
         ll->size++;
-        ll->cap++;
         return true;
     }
     return false;
@@ -138,7 +77,6 @@ struct aid_LLNode aid_pop(struct aid_LinkedList* ll){
     ll->LOST_NODES = ll->tail;
     ll->num_lost_nodes++;
     ll->size--;
-    ll->cap = ll->size;
     if (ll->size == 0) {
         ll->head = nullptr;
         ll->tail = nullptr;
@@ -148,7 +86,7 @@ struct aid_LLNode aid_pop(struct aid_LinkedList* ll){
     }
 
     
-#if defined(AUTO_COLLECT_LL_GARBAGE)
+#if !defined(MANUAL_COLLECT_LL_GARBAGE)
     if(ll->num_lost_nodes > 30){
         aid_collect_garbage(ll);
     }
@@ -176,9 +114,6 @@ bool aid_free_LL(struct aid_LinkedList* ll){
     while(ll->head){
         struct aid_LLNode* node = ll->head;
         ll->head= ll->head->next;
-        while (ll->head && ll->head->not_allocated) {
-            ll->head= ll->head->next;
-        }
         free(node);
     }
 

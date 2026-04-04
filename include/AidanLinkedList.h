@@ -18,7 +18,6 @@
     #define LLtype aid_LLtype
 #endif
 
-typedef struct aid_LLNode Node;
 
 typedef enum aid_LLtype{
     NOT_INIT = 0,
@@ -30,11 +29,31 @@ typedef enum aid_LLtype{
     VOIDPTR,
 }LLtype;
 
-typedef struct aid_LinkedList LinkedList;
+typedef struct aid_LLNode{
+    enum aid_LLtype type;
+    union {
+        f32 F32;
+        f64 F64;
+        i64 I64;
+        u64 U64;
+        struct aid_string* STRING;
+        void* VOIDPTR;
+    };
+    struct aid_LLNode* next;
+    struct aid_LLNode* prev;
+}Node;
 
-bool aid_reserve(LinkedList* ll, u64 size);
+typedef struct aid_LinkedList{
+    u64 size;
+    struct aid_LLNode* head;
+    struct aid_LLNode* tail;
+    u64 num_lost_nodes;
+    struct aid_LLNode* LOST_NODES;
+}LinkedList;
+
 bool aid_push(LinkedList* ll, void* val, LLtype type);
 Node aid_pop(LinkedList* ll);
+Node aid_remove_index(LinkedList* ll, void* idx);
 bool aid_free_LL(LinkedList* ll);
 Node* aid_head(LinkedList* ll);
 bool aid_collect_garbage(struct aid_LinkedList* ll);

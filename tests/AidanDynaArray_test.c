@@ -14,6 +14,7 @@ int testPush_String() {
     t_assert(arr.cap == 10);
     t_assert(arr.len == 1);
     t_assert(str_cmp(arr.data[0],&STR_LIT("hello")) == true);
+    free(arr.data);
     return 0;
 }
 
@@ -27,6 +28,7 @@ int testPop_String() {
     String* str2 = arr_pop(arr);
     t_assert(str_cmp(arr.data[0],&STR_LIT("hello")) == true);
     t_assert(arr.len == 0);
+    free(arr.data);
     return 0;
 }
 
@@ -42,6 +44,7 @@ int testPush_f32() {
     t_assert(arr.len == 2);
     t_assert(arr.data[0] == 3.14f);
     t_assert(arr.data[1] == 6.7f);
+    free(arr.data);
     return 0;
 }
 
@@ -55,6 +58,7 @@ int testPop_f32() {
     f32 popVal = arr_pop(arr);
     t_assert(popVal == 3.14f);
     t_assert(arr.len == 0);
+    free(arr.data);
     return 0;
 }
 
@@ -70,6 +74,7 @@ int testPush_f64() {
     t_assert(arr.len == 2);
     t_assert(arr.data[0] == 3.14);
     t_assert(arr.data[1] == 6.7);
+    free(arr.data);
     return 0;
 }
 
@@ -83,6 +88,7 @@ int testPop_f64() {
     f64 popVal = arr_pop(arr);
     t_assert(popVal == 3.14);
     t_assert(arr.len == 0);
+    free(arr.data);
     return 0;
 }
 
@@ -98,6 +104,7 @@ int testPush_u64() {
     t_assert(arr.len == 2);
     t_assert(arr.data[0] == 42);
     t_assert(arr.data[1] == 99);
+    free(arr.data);
     return 0;
 }
 
@@ -111,6 +118,7 @@ int testPop_u64() {
     u64 popVal = arr_pop(arr);
     t_assert(popVal == 42);
     t_assert(arr.len == 0);
+    free(arr.data);
     return 0;
 }
 
@@ -126,6 +134,7 @@ int testPush_i64() {
     t_assert(arr.len == 2);
     t_assert(arr.data[0] == -42);
     t_assert(arr.data[1] == 99);
+    free(arr.data);
     return 0;
 }
 
@@ -139,6 +148,7 @@ int testPop_i64() {
     i64 popVal = arr_pop(arr);
     t_assert(popVal == -42);
     t_assert(arr.len == 0);
+    free(arr.data);
     return 0;
 }
 
