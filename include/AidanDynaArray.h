@@ -5,6 +5,7 @@
 #ifndef AIDAN_DYNAARRAY
 #define AIDAN_DYNAARRAY
 #include "AidanCommon.h"
+#include "AidanString.h"
 #include <stdlib.h>
 
 #ifdef AIDAN_SHORT_NAMES
@@ -43,7 +44,7 @@ typedef struct aid_CONCAT(Array, i64) {
 typedef struct aid_CONCAT(Array, string) {
     u64 cap;
     u64 len;
-    struct aid_string** data[];
+    struct aid_string** data;
 }aid_CONCAT(Array, string);
 
 typedef struct aid_CONCAT(Array, void) {
