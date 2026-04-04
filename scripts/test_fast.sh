@@ -2,7 +2,7 @@
 set -uo pipefail # Removed -e to manually handle background job failures
 
 CC=gcc
-CFLAGS="-g -O0 -fsanitize=address,undefined -I../include"
+CFLAGS="-g -O0 -fsanitize=address,undefined -I../include -fno-omit-frame-pointer"
 RUN_DIR="../.test_bins"
 
 cd ./scripts

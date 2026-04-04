@@ -24,7 +24,7 @@ enum aid_str_err aid_str_incrcease_cap(struct aid_string* s, u64 incr_size){
     return STRING_INCREASE_FAIL;
 }
 
-enum aid_str_err str_append_char(struct aid_string* s, char character) {
+enum aid_str_err aid_str_append_char(struct aid_string* s, char character) {
     if (s->length == s->cap) {
         StringBump(s)
     }
@@ -33,7 +33,7 @@ enum aid_str_err str_append_char(struct aid_string* s, char character) {
     return STRING_SUCCESS;
 }
 
-enum aid_str_err str_append_int(struct aid_string* s, u64 num) {
+enum aid_str_err aid_str_append_int(struct aid_string* s, i64 num) {
     char buffer[22];
     int length = snprintf(buffer, sizeof(buffer), "%ld", num);
     if (s->length + length > s->cap) {
@@ -48,7 +48,7 @@ enum aid_str_err str_append_int(struct aid_string* s, u64 num) {
 }
 
 
-enum aid_str_err str_append_string(struct aid_string* str1, struct aid_string* str2) {
+enum aid_str_err aid_str_append_string(struct aid_string* str1, struct aid_string* str2) {
     if (str1->length + str2->length > str1->cap) {
         StringBumpSpec(str1, str2->length)
     }
@@ -63,7 +63,7 @@ enum aid_str_err str_append_string(struct aid_string* str1, struct aid_string* s
 /*
  * creates a new string in the arena provided and then replaces the final char with \0
  */
-struct aid_string* str_new(struct aid_arena* arena, u64 length, char str[length], u64 cap) {
+struct aid_string* aid_str_new(struct aid_arena* arena, u64 length, char str[length], u64 cap) {
     struct aid_string* result = aid_arena_alloc(arena, sizeof(struct aid_string), alignof(struct aid_string));
     if (!result) {
         printf("Could not allocate memory for new String.");
@@ -87,7 +87,7 @@ struct aid_string* str_new(struct aid_arena* arena, u64 length, char str[length]
     return result;
 }
 
-enum aid_str_err str_substring(struct aid_string old[static 1], struct aid_string new[static 1], u64 start, u64 end) {
+enum aid_str_err aid_str_substring(struct aid_string old[static 1], struct aid_string new[static 1], u64 start, u64 end) {
     if (old->length < end || end-start > new->cap) return STRING_OVERFLOW;
     if (start >= end) return STRING_ILLEGAL_ARGUMENT;
     int index = 0;
@@ -99,7 +99,7 @@ enum aid_str_err str_substring(struct aid_string old[static 1], struct aid_strin
 }
 
 
-bool str_cmp(struct aid_string* str1, struct aid_string* str2) {
+bool aid_str_cmp(struct aid_string* str1, struct aid_string* str2) {
     if (str1->length != str2->length) return false;
     for (i64 i = 0; i < str1->length; i++) {
         if (str1->s[i] != str2->s[i]) {
@@ -109,9 +109,9 @@ bool str_cmp(struct aid_string* str1, struct aid_string* str2) {
     return true;
 }
 
-struct aid_string* str_concat(struct aid_arena* arena, struct aid_string* str1, struct aid_string* str2) {
+struct aid_string* aid_str_concat(struct aid_arena* arena, struct aid_string* str1, struct aid_string* str2) {
     u64 new_cap = str2->cap + str1->cap;
-    auto result = str_new(arena, str1->length, str1->s, new_cap);
+    auto result = aid_str_new(arena, str1->length, str1->s, new_cap);
     if (!result) {
         printf("Could not allocate memory for string concat.");
         return nullptr;
@@ -125,7 +125,7 @@ struct aid_string* str_concat(struct aid_arena* arena, struct aid_string* str1, 
 }
 
 
-int str_replace_char(struct aid_string* old, char old_char, char new_char) {
+int aid_str_replace_char(struct aid_string* old, char old_char, char new_char) {
     int num_replaced = 0;
     for (u64 i = 0; i < old->length; i++) {
         if (old->s[i] == old_char) {
@@ -136,7 +136,7 @@ int str_replace_char(struct aid_string* old, char old_char, char new_char) {
     return num_replaced;
 }
 
-enum aid_str_err str_clear(struct aid_string* str) {
+enum aid_str_err aid_str_clear(struct aid_string* str) {
     int i = 0;
     while (i < str->length) {
         str->s[i++] = '\0';

@@ -2,8 +2,8 @@
 // Created by aidankeefe on 3/15/26.
 //
 
-#ifndef HTTP_ASYNC_STRING_LINKED_LIST_H
-#define HTTP_ASYNC_STRING_LINKED_LIST_H
+#ifndef AIDAN_LINKED_LIST
+#define AIDAN_LINKED_LIST
 #include <AidanString.h>
 #include <AidanArena.h>
 #include <AidanCommon.h>

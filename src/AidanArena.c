@@ -8,9 +8,12 @@
  */
 struct aid_arena* aid_create_arena(const size_t size_in_bytes) {
     struct aid_arena* arena = calloc(1, sizeof(*arena));
+    if (arena == nullptr) return nullptr;
     uint8_t* buffer = calloc(size_in_bytes, sizeof(char));
-    if (!buffer)
+    if (!buffer){
+        free(arena);
         return nullptr;
+    }
     arena->buffer = buffer;
     arena->currentPointer = arena->buffer;
     arena->size = size_in_bytes;
@@ -40,7 +43,7 @@ ARENA_STATUS aid_arena_clear(struct aid_arena arena[static 1]) {
     return ARENA_OK;
 }
 
-ARENA_STATUS aid_arena_free(struct aid_arena arena[static 1]) {
+ARENA_STATUS aid_arena_free(struct aid_arena* arena) {
     free(arena->buffer);
     free(arena);
     return ARENA_OK;

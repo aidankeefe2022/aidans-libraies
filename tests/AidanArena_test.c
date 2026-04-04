@@ -28,7 +28,7 @@ int testAllocate() {
 }
 
 int main() {
-    Tests_set ts = {0};
+    Tests_set ts = {__FILE__};
     reg_test(ts, testCreateArena);
     reg_test(ts, testAllocate);
     run_tests(&ts);
