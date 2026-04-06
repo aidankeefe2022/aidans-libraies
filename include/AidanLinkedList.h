@@ -53,9 +53,9 @@ typedef struct aid_LinkedList{
 
 bool aid_push(LinkedList* ll, void* val, LLtype type);
 Node aid_pop(LinkedList* ll);
-Node aid_remove_index(LinkedList* ll, void* idx);
+Node aid_remove_index(LinkedList* ll, i32 idx);
+struct aid_LLNode aid_pop_first(struct aid_LinkedList* ll);
 bool aid_free_LL(LinkedList* ll);
-Node* aid_head(LinkedList ll);
 bool aid_collect_garbage(struct aid_LinkedList* ll);
 
 #undef LinkedList

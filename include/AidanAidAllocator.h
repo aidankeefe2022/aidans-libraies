@@ -23,7 +23,7 @@ typedef struct aid_AidAllocator {
 
 void* aid_AidAlloc(AidAllocator* a, size_t size);
 bool aid_AidFreePtr(AidAllocator* a, void* ptr);
-bool aid_AidReleaseAll(AidAllocator* a);
+void aid_AidReleaseAll(AidAllocator* a);
 
 
 

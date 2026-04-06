@@ -90,7 +90,7 @@ typedef struct aid_CONCAT(Array, void) {
     }\
     (&arr)->data[(&arr)->len++] = v; \
     }while(0);
-#define aid_arr_pop(arr) (&arr)->data[(--((&arr)->len))]
+#define aid_arr_pop(arr) (&(arr)->data[(--((&(arr)->len))]
 #endif
 
 

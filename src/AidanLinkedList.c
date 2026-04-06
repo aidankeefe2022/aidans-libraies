@@ -61,10 +61,6 @@ bool aid_push(struct aid_LinkedList* ll, void* val, enum aid_LLtype type){
     return false;
 }
 
-struct aid_LLNode* aid_head(struct aid_LinkedList ll) {
-    return ll.head;
-}
-
 struct aid_LLNode aid_pop(struct aid_LinkedList* ll){
     struct aid_LLNode node = {0};
     if (!ll->size){
@@ -93,6 +89,34 @@ struct aid_LLNode aid_pop(struct aid_LinkedList* ll){
 #endif
 
     return node;
+}
+
+struct aid_LLNode aid_pop_first(struct aid_LinkedList* ll) {
+    return aid_remove_index(ll, 0);
+}
+
+struct aid_LLNode aid_remove_index(struct aid_LinkedList* ll, i32 idx) {
+    if (ll->size <= idx)
+        return (struct aid_LLNode){0};
+    struct aid_LLNode* node = ll->head;
+    for (i32 i = 0; i < idx; i++) {
+        node = node->next;
+        if (!node)
+            return (struct aid_LLNode){0};
+    }
+    struct aid_LLNode* curNodeNextPtr = node->next;
+    if (node->prev)
+        node->prev->next = curNodeNextPtr;
+
+    if (curNodeNextPtr) {
+        curNodeNextPtr->prev = node->prev;
+    }
+    node->next = ll->LOST_NODES;
+    ll->LOST_NODES = node;
+    struct aid_LLNode retNode = *node;
+    retNode.next = nullptr;
+    retNode.prev = nullptr;
+    return retNode;
 }
 
 bool aid_collect_garbage(struct aid_LinkedList* ll) {
