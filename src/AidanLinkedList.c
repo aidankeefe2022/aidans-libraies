@@ -61,8 +61,8 @@ bool aid_push(struct aid_LinkedList* ll, void* val, enum aid_LLtype type){
     return false;
 }
 
-struct aid_LLNode* aid_head(struct aid_LinkedList* ll) {
-    return ll->head;
+struct aid_LLNode* aid_head(struct aid_LinkedList ll) {
+    return ll.head;
 }
 
 struct aid_LLNode aid_pop(struct aid_LinkedList* ll){
