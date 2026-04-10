@@ -11,24 +11,23 @@
 #include <stdlib.h>
 
 #ifdef AiDAN_SHORT_NAMES
-#define AidAllocator AidAllocator
+#define AidAllocator_t AidAllocator
 #else
-#define AidAllocator aid_AidAllocator
+#define AidAllocator_t aid_AidAllocator
 #endif
 
 typedef struct aid_AidAllocator {
     struct aid_DArray_void mem;
     struct aid_LinkedList freeList;
-}AidAllocator;
+}AidAllocator_t;
 
-void* aid_AidAlloc(AidAllocator* a, size_t size);
-bool aid_AidFreePtr(AidAllocator* a, void* ptr);
-void aid_AidReleaseAll(AidAllocator* a);
+void* aid_AidAlloc(AidAllocator_t* a, size_t size);
+bool aid_AidFreePtr(AidAllocator_t* a, void* ptr);
+void aid_AidReleaseAll(AidAllocator_t* a);
+void* aid_AidRealloc(AidAllocator_t* a, void* ptr, size_t size);
 
 
 
-
-#undef AidAllocator
-#undef AidAllocatorCode
+#undef AidAllocator_t
 
 #endif

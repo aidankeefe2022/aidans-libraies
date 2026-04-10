@@ -205,7 +205,7 @@ int testIterate() {
 	aid_push(&ll, &i, U64);
 	aid_push(&ll, &i, U64);
 
-	LLNode* node = aid_head(&ll);
+	LLNode* node = ll.head;
 
 	while (node) {
 		t_assert(node->U64 == 3);
