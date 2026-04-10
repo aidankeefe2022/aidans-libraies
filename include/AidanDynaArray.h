@@ -57,9 +57,9 @@ typedef struct aid_CONCAT(Array, void) {
 #define arr_incr_cap(arr, n) do{ \
     if ((&arr)->len >= (&arr)->cap) { \
         (&arr)->cap += n; \
-        void* temp = realloc((&arr)->data, (&arr)->cap*sizeof(*((&arr)->data))); \
+        void* temp = realloc((&arr)->data, (&arr)->cap*sizeof(*((&arr)->data)));\
         if(temp){\
-            (&arr)->data = temp; \
+            (&arr)->data = temp;\
         }else{\
             (&arr)->cap -= n;\
         }\
