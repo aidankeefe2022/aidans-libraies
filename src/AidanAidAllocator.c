@@ -2,8 +2,9 @@
 // Created by aidankeefe on 4/6/26.
 //
 #include <AidanAidAllocator.h>
-
 void* aid_AidRealloc(struct aid_AidAllocator* a, void* ptr, size_t newSize){
+    if (!ptr)
+        return nullptr;
     for(u64 i = 0; i < a->mem.len; i++){
         if (a->mem.data[i] == ptr){
             void* newPtr;
