@@ -5,9 +5,9 @@
 #ifndef AIDANS_AIDANAIDALLOCATOR_H
 #define AIDANS_AIDANAIDALLOCATOR_H
 
-#include <AidanCommon.h>
-#include <AidanDynaArray.h>
-#include <AidanLinkedList.h>
+#include "AidanCommon.h"
+#include "AidanDynaArray.h"
+#include "AidanLinkedList.h"
 #include <stdlib.h>
 
 #ifdef AiDAN_SHORT_NAMES

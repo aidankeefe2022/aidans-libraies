@@ -5,9 +5,9 @@
 #include <AidanDynaArray.h>
 #include "../src/AidanString.c"
 #include "../src/AidanArena.c"
-#include "Testing.h"
+#include "../include/AidanTesting.h"
 
-int testPush_String() {
+int testPush_String(test_arg) {
     DArray_string arr = {0};
     String s1 = STR_LIT("hello");
     arr_push(arr, &s1);
@@ -15,10 +15,10 @@ int testPush_String() {
     t_assert(arr.len == 1);
     t_assert(str_cmp(arr.data[0],&STR_LIT("hello")) == true);
     free(arr.data);
-    return 0;
+    test_end
 }
 
-int testPop_String() {
+int testPop_String(test_arg) {
     DArray_string arr = {0};
     String s1 = STR_LIT("hello");
     arr_push(arr, &s1);
@@ -29,10 +29,10 @@ int testPop_String() {
     t_assert(str_cmp(arr.data[0],&STR_LIT("hello")) == true);
     t_assert(arr.len == 0);
     free(arr.data);
-    return 0;
+    test_end
 }
 
-int testPush_f32() {
+int testPush_f32(test_arg) {
     DArray_f32 arr = {0};
     arr_push(arr, 3.14f);
     t_assert(arr.cap == 10);
@@ -45,10 +45,10 @@ int testPush_f32() {
     t_assert(arr.data[0] == 3.14f);
     t_assert(arr.data[1] == 6.7f);
     free(arr.data);
-    return 0;
+    test_end
 }
 
-int testPop_f32() {
+int testPop_f32(test_arg) {
     DArray_f32 arr = {0};
     arr_push(arr, 3.14f);
     t_assert(arr.cap == 10);
@@ -59,10 +59,10 @@ int testPop_f32() {
     t_assert(popVal == 3.14f);
     t_assert(arr.len == 0);
     free(arr.data);
-    return 0;
+    test_end
 }
 
-int testPush_f64() {
+int testPush_f64(test_arg) {
     DArray_f64 arr = {0};
     arr_push(arr, 3.14);
     t_assert(arr.cap == 10);
@@ -75,10 +75,10 @@ int testPush_f64() {
     t_assert(arr.data[0] == 3.14);
     t_assert(arr.data[1] == 6.7);
     free(arr.data);
-    return 0;
+    test_end
 }
 
-int testPop_f64() {
+int testPop_f64(test_arg) {
     DArray_f64 arr = {0};
     arr_push(arr, 3.14);
     t_assert(arr.cap == 10);
@@ -89,10 +89,10 @@ int testPop_f64() {
     t_assert(popVal == 3.14);
     t_assert(arr.len == 0);
     free(arr.data);
-    return 0;
+    test_end
 }
 
-int testPush_u64() {
+int testPush_u64(test_arg) {
     DArray_u64 arr = {0};
     arr_push(arr, 42);
     t_assert(arr.cap == 10);
@@ -105,10 +105,10 @@ int testPush_u64() {
     t_assert(arr.data[0] == 42);
     t_assert(arr.data[1] == 99);
     free(arr.data);
-    return 0;
+    test_end
 }
 
-int testPop_u64() {
+int testPop_u64(test_arg) {
     DArray_u64 arr = {0};
     arr_push(arr, 42);
     t_assert(arr.cap == 10);
@@ -119,10 +119,10 @@ int testPop_u64() {
     t_assert(popVal == 42);
     t_assert(arr.len == 0);
     free(arr.data);
-    return 0;
+    test_end
 }
 
-int testPush_i64() {
+int testPush_i64(test_arg) {
     DArray_i64 arr = {0};
     arr_push(arr, -42);
     t_assert(arr.cap == 10);
@@ -135,10 +135,10 @@ int testPush_i64() {
     t_assert(arr.data[0] == -42);
     t_assert(arr.data[1] == 99);
     free(arr.data);
-    return 0;
+    test_end
 }
 
-int testPop_i64() {
+int testPop_i64(test_arg) {
     DArray_i64 arr = {0};
     arr_push(arr, -42);
     t_assert(arr.cap == 10);
@@ -149,7 +149,7 @@ int testPop_i64() {
     t_assert(popVal == -42);
     t_assert(arr.len == 0);
     free(arr.data);
-    return 0;
+    test_end
 }
 
 int main() {
@@ -170,5 +170,5 @@ int main() {
     reg_test(ts, testPush_String);
     reg_test(ts, testPop_String);
 
-    run_tests(&ts);
+    return run_tests(&ts);
 }

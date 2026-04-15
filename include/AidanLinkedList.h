@@ -4,9 +4,9 @@
 
 #ifndef AIDAN_LINKED_LIST
 #define AIDAN_LINKED_LIST
-#include <AidanString.h>
-#include <AidanArena.h>
-#include <AidanCommon.h>
+#include "AidanString.h"
+#include "AidanArena.h"
+#include "AidanCommon.h"
 
 #ifdef AIDAN_SHORT_NAMES
     #define LinkedList LinkedList
@@ -62,4 +62,4 @@ bool aid_collect_garbage(struct aid_LinkedList* ll);
 #undef Node 
 #undef LLtype
 
-#endif //HTTP_ASYNC_STRING_LINKED_LIST_H
+#endif

@@ -4,9 +4,9 @@
 #include "../src/AidanLinkedList.c"
 #include "../src/AidanArena.c"
 #include "../src/AidanString.c"
-#include "Testing.h"
+#include "../include/AidanTesting.h"
 
-int testPush(){
+int testPush(test_arg){
 	LinkedList ll = {0};
 	u64 i = 4;
 	aid_push(&ll, &i, U64);
@@ -23,10 +23,10 @@ int testPush(){
 	t_assert(ll.head != ll.tail);
 
     aid_free_LL(&ll);
-	return 0;
+	test_end
 }
 
-int testPop() {
+int testPop(test_arg) {
 	LinkedList ll = {0};
 	u64 i = 3;
 	aid_push(&ll, &i, U64);
@@ -36,10 +36,10 @@ int testPop() {
 	t_assert(ll.size == 0);
 
     aid_free_LL(&ll);
-	return 0;
+	test_end
 }
 
-int test_u64_type(void) {
+int test_u64_type(test_arg) {
     LinkedList ll = {0};
 
     u64 a = 10;
@@ -56,10 +56,10 @@ int test_u64_type(void) {
     t_assert(n2.U64 == 10);
 
     aid_free_LL(&ll);
-    return 0;
+    test_end
 }
 
-int test_i64_type(void) {
+int test_i64_type(test_arg) {
     LinkedList ll = {0};
 
     i64 a = -10;
@@ -75,10 +75,10 @@ int test_i64_type(void) {
     t_assert(n2.I64 == -10);
 
     aid_free_LL(&ll);
-    return 0;
+    test_end
 }
 
-int test_f32_type(void) {
+int test_f32_type(test_arg) {
     LinkedList ll = {0};
 
     f32 a = 1.5f;
@@ -94,10 +94,10 @@ int test_f32_type(void) {
     t_assert(n2.F32 == 1.5f);
 
     aid_free_LL(&ll);
-    return 0;
+    test_end
 }
 
-int test_f64_type(void) {
+int test_f64_type(test_arg) {
     LinkedList ll = {0};
 
     f64 a = 1.25;
@@ -113,10 +113,10 @@ int test_f64_type(void) {
     t_assert(n2.F64 == 1.25);
 
     aid_free_LL(&ll);
-    return 0;
+    test_end
 }
 
-int test_voidptr_type(void) {
+int test_voidptr_type(test_arg) {
     LinkedList ll = {0};
 
     int a = 11;
@@ -135,10 +135,10 @@ int test_voidptr_type(void) {
     t_assert(n2.VOIDPTR == pa);
 
     aid_free_LL(&ll);
-    return 0;
+    test_end
 }
 
-int test_string_type(void) {
+int test_string_type(test_arg) {
     LinkedList ll = {0};
 
     struct aid_string s1 = {0};
@@ -154,10 +154,10 @@ int test_string_type(void) {
     t_assert(n2.STRING == &s1);
 
     aid_free_LL(&ll);
-    return 0;
+    test_end
 }
 
-int test_mixed_types_fail(void) {
+int test_mixed_types_fail(test_arg) {
     LinkedList ll = {0};
 
     u64 x = 5;
@@ -167,21 +167,10 @@ int test_mixed_types_fail(void) {
     t_assert(aid_push(&ll, &y, I64) == true);
 
     aid_free_LL(&ll);
-    return 0;
+    test_end
 }
 
-int testTypes(void) {
-    t_assert(test_u64_type() == 0);
-    t_assert(test_i64_type() == 0);
-    t_assert(test_f32_type() == 0);
-    t_assert(test_f64_type() == 0);
-    t_assert(test_voidptr_type() == 0);
-    t_assert(test_string_type() == 0);
-    t_assert(test_mixed_types_fail() == 0);
-    return 0;
-}
-
-int testCollectGarbage() {
+int testCollectGarbage(test_arg) {
 	LinkedList ll = {0};
 	u64 i = 3;
 	aid_push(&ll, &i, U64);
@@ -195,10 +184,10 @@ int testCollectGarbage() {
 	t_assert(aid_collect_garbage(&ll));
 	t_assert(!ll.LOST_NODES);
 	aid_free_LL(&ll);
-	return 0;
+	test_end
 }
 
-int testIterate() {
+int testIterate(test_arg){
 	LinkedList ll = {0};
 	u64 i = 3;
 	aid_push(&ll, &i, U64);
@@ -213,16 +202,21 @@ int testIterate() {
 	}
 
 	aid_free_LL(&ll);
-	return 0;
+	test_end
 }
 
-int main(){
+int main(test_arg){
 	Tests_set ts = {__FILE__};
 	reg_test(ts, testPush);
 	reg_test(ts, testPop);
 	reg_test(ts, testCollectGarbage);
 	reg_test(ts, testIterate);
-	reg_test(ts, testTypes);
-	run_tests(&ts);
-	return EXIT_SUCCESS;
+    reg_test(ts, test_u64_type);
+    reg_test(ts, test_i64_type);
+    reg_test(ts, test_f32_type);
+    reg_test(ts, test_f64_type);
+    reg_test(ts, test_voidptr_type);
+    reg_test(ts, test_string_type);
+    reg_test(ts, test_mixed_types_fail);
+	return run_tests(&ts);
 }

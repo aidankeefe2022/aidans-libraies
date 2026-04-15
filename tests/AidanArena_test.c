@@ -6,17 +6,17 @@
 #include "../src/AidanArena.c"
 
 #include "AidanCommon.h"
-#include "Testing.h"
+#include "../include/AidanTesting.h"
 
-int testCreateArena() {
+int testCreateArena(test_arg) {
     Arena* a = arena_create(MiB(1));
     t_assert(a);
     arena_free(a);
-    return 0;
+    test_end
 }
 
 
-int testAllocate() {
+int testAllocate(test_arg) {
     Arena* a = arena_create(MiB(1));
     t_assert(a);
     u64* i = arena_alloc(a, sizeof(u64), alignof(u64));
@@ -24,12 +24,12 @@ int testAllocate() {
     *i = 6;
     t_assert(*i == 6);
     arena_free(a);
-    return 0;
+    test_end
 }
 
 int main() {
     Tests_set ts = {__FILE__};
     reg_test(ts, testCreateArena);
     reg_test(ts, testAllocate);
-    run_tests(&ts);
+    return run_tests(&ts);
 }

@@ -17,41 +17,19 @@
 #define aid_CONCAT_INNER(a, b) a##_##b
 #define aid_CONCAT(a, b) aid_CONCAT_INNER(a, b)
 
-typedef struct aid_CONCAT(aid_DArray, f32) {
-    u64 cap;
-    u64 len;
-    f32* data;
-}aid_CONCAT(Array, f32);
+#define ArrayCreateInner(Array, type, typeName) typedef struct aid_CONCAT(aid_DArray, typeName){ \
+    u64 cap;\
+    u64 len;\
+    type* data;\
+}aid_CONCAT(Array, typeName)
+#define ArrayCreate(type, typeName) ArrayCreateInner(Array, type, typeName)
 
-typedef struct aid_CONCAT(aid_DArray, f64) {
-    u64 cap;
-    u64 len;
-    f64* data;
-}aid_CONCAT(Array, f64);
-
-typedef struct aid_CONCAT(aid_DArray, u64) {
-    u64 cap;
-    u64 len;
-    u64* data;
-}aid_CONCAT(Array, u64);
-
-typedef struct aid_CONCAT(aid_DArray, i64) {
-    u64 cap;
-    u64 len;
-    i64* data;
-}aid_CONCAT(Array, i64);
-
-typedef struct aid_CONCAT(aid_DArray, string) {
-    u64 cap;
-    u64 len;
-    struct aid_string** data;
-}aid_CONCAT(Array, string);
-
-typedef struct aid_CONCAT(aid_DArray, void) {
-    u64 cap;
-    u64 len;
-    void** data;
-}aid_CONCAT(Array, void);
+ArrayCreate(u64, u64);
+ArrayCreate(f64, f64);
+ArrayCreate(f32, f32);
+ArrayCreate(i64, i64);
+ArrayCreate(struct aid_string*, string);
+ArrayCreate(void*, void);
 
 #ifdef AIDAN_SHORT_NAMES
 #define arr_incr_cap_cust(arr, n, reallocator) do{ \
@@ -90,6 +68,8 @@ typedef struct aid_CONCAT(aid_DArray, void) {
     }while(0);
 #define arr_pop(arr) (&arr)->data[(--((&arr)->len))]
 #endif
+
+
 #define aid_arr_incr_cap_cust(arr, n, reallocator) do{ \
     if ((&arr)->len >= (&arr)->cap) { \
         (&arr)->cap += n; \
@@ -101,12 +81,14 @@ typedef struct aid_CONCAT(aid_DArray, void) {
         }\
     }\
 }while(0);
+
 #define aid_arr_push_cust(arr,v, reallocator) do{\
     if (((&arr)->len+1) >= (&arr)->cap) { \
         aid_arr_incr_cap((arr), 10, reallocator); \
     }\
     (&arr)->data[(&arr)->len++] = v; \
     }while(0);
+
 #define aid_arr_incr_cap(arr, n) do{ \
     if ((&arr)->len >= (&arr)->cap) { \
         (&arr)->cap += n; \
@@ -118,6 +100,7 @@ typedef struct aid_CONCAT(aid_DArray, void) {
         }\
     }\
 }while(0);
+
 #define aid_arr_push(arr,v) do{\
     if (((&arr)->len+1) >= (&arr)->cap) { \
         aid_arr_incr_cap((arr), 10); \

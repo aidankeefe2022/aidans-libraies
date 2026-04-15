@@ -4,8 +4,8 @@
 
 #ifndef AIDAN_STRING_H
 #define AIDAN_STRING_H
-#include <AidanCommon.h>
-#include <AidanArena.h>
+#include "AidanCommon.h"
+#include "AidanArena.h"
 #include <stdio.h>
 
 

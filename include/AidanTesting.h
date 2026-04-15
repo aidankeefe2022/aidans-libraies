@@ -6,14 +6,17 @@
 #define WOLFHTTPS_TESTING_H
 #include <stdio.h>
 #include <time.h>
+#include <stdlib.h>
 
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_GREEN   "\x1b[32m"
 #define ANSI_COLOR_RESET   "\x1b[0m" // Resets to default color
 
-#define Pass() printf(ANSI_COLOR_GREEN"passed: %s : %s : %d\n"ANSI_COLOR_RESET, __func__, __FILE__, __LINE__); return 0;
-#define Fail() printf(ANSI_COLOR_RED"failed: %s : %s : %d\n"ANSI_COLOR_RESET, __func__, __FILE__, __LINE__); return 1;
+#define Fail() printf(ANSI_COLOR_RED"failed: %s : %s : %d\n"ANSI_COLOR_RESET, __func__, __FILE__, __LINE__); result = 1;
 #define t_assert(expr) if (!(expr)) {Fail()}
+#define test_arg int result
+#define test_end return result;
+
 
 typedef enum test_err {
     SUCCESS,
@@ -22,7 +25,7 @@ typedef enum test_err {
 
 
 typedef struct test {
-    int(*test)(void);
+    int(*test)(int);
     struct test *next;
 }Test;
 
@@ -70,7 +73,7 @@ test_err run_tests(Tests_set *ts) {
     start_t = clock();
 
     while (ts->head) {
-        if (!ts->head->test()) {
+        if (!ts->head->test(0)) {
             num_pass++;
         }
         ts->head = ts->head->next;
@@ -82,7 +85,10 @@ test_err run_tests(Tests_set *ts) {
 
     printf(ANSI_COLOR_GREEN"%d of %d have passed \n"ANSI_COLOR_RESET, num_pass, ts->size);
     printf("Tests Ran In: %f seconds\n\n", time);
-    return SUCCESS;
+    if (ts->size > num_pass) {
+        return EXIT_FAILURE;
+    }
+    return EXIT_SUCCESS;
 }
 
 

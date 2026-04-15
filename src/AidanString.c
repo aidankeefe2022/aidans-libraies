@@ -61,7 +61,7 @@ enum aid_str_err aid_str_append_string(struct aid_string* str1, struct aid_strin
 
 
 /*
- * creates a new string in the arena provided and then replaces the final char with \0
+ * creates a new string in the arena provided this is not a null terminated array
  */
 struct aid_string* aid_str_new(struct aid_arena* arena, u64 length, char str[length], u64 cap) {
     struct aid_string* result = aid_arena_alloc(arena, sizeof(struct aid_string), alignof(struct aid_string));
@@ -78,9 +78,6 @@ struct aid_string* aid_str_new(struct aid_arena* arena, u64 length, char str[len
         new_string[i] = str[i];
     }
 
-
-    new_string[length-1] = '\0';
-
     result->s = new_string;
     result->length = length;
     result->cap = cap;
@@ -91,7 +88,7 @@ enum aid_str_err aid_str_substring(struct aid_string old[static 1], struct aid_s
     if (old->length < end || end-start > new->cap) return STRING_OVERFLOW;
     if (start >= end) return STRING_ILLEGAL_ARGUMENT;
     int index = 0;
-    while (start < end) {
+    while (start <= end) {
         new->s[index++] = old->s[start++];
     }
     new->length = index;

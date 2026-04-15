@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
-./scripts/test_fast.sh
+
+if !(./scripts/test_fast.sh) ; then #if tests fail then we dont continue
+  echo -e "\n\n\\e[1;31m Error in tests exited build process.\\e[0m"
+  exit 1
+fi
+
 
 gcc -c -Iinclude -Wall -fPIC main.c -o main.o
 gcc -shared -o libAidan.so main.o

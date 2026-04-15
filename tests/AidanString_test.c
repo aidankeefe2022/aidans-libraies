@@ -1,13 +1,13 @@
 //
 // Created by aidankeefe on 1/18/26.
 //
-#include "Testing.h"
+#include "../include/AidanTesting.h"
 #define AIDAN_SHORT_NAMES
 #include <AidanString.h>
 #include "../src/AidanString.c"
 #include "../src/AidanArena.c"
 
-int test_str_append_string() {
+int test_str_append_string(test_arg) {
     Arena* a = arena_create(MiB(1));
     String* str = str_new(a,  2, "x", 10);
     String str1 = STR_LIT("hello");
@@ -20,10 +20,10 @@ int test_str_append_string() {
     String test_str3 = STR_LIT("hello");
     t_assert(str_append_string(&test_str2, &test_str3) == STRING_OVERFLOW);
     arena_free(a);
-    return 0;
+    test_end
 }
 
-int test_str_append_int() {
+int test_str_append_int(test_arg) {
     Arena* a = arena_create(MiB(1));
     String* str = str_new(a,  1, "h", 10);
     str_append_int(str, 70);
@@ -36,10 +36,10 @@ int test_str_append_int() {
     t_assert(str_append_int(&str1, 4) == STRING_OVERFLOW);
 
     arena_free(a);
-    return 0;
+    test_end
 }
 
-int test_str_append() {
+int test_str_append(test_arg) {
     Arena* a = arena_create(MiB(1));
     String* str = str_new(a,  2, "h", 10);
     str_append_char(str, 'i');
@@ -55,30 +55,29 @@ int test_str_append() {
 
 
     arena_free(a);
-    return 0;
+    test_end
 }
 
-int test_str_substring() {
+int test_str_substring(test_arg) {
     Arena* a = arena_create(MiB(1));
     String str = STR_LIT("hello");
     String* new = str_new(a, sizeof(""), "", 40);
 
-    t_assert(str_substring(&str, new, 0, 3) == STRING_SUCCESS);
+    t_assert(str_substring(&str, new, 0, 2) == STRING_SUCCESS);
     t_assert(new->length == 3);
     t_assert(new->s[0] == 'h');
     t_assert(new->s[1] == 'e');
     t_assert(new->s[2] == 'l');
-    t_assert(new->s[3] == '\0');
 
     str_clear(new);
     t_assert(str_substring(&str, new, -1, -4) == STRING_OVERFLOW);
 
     arena_free(a);
-    return 0;
+    test_end
 }
 
 
-int test_str_concat() {
+int test_str_concat(test_arg) {
     Arena* a = arena_create(MiB(1));
     String str1 = STR_LIT("hello");
     String str2 = STR_LIT("hello");
@@ -89,29 +88,29 @@ int test_str_concat() {
     t_assert(str3->s[0] == 'h');
     arena_free(a);
 
-    return 0;
+    test_end
 }
 
-int test_str_replace_char() {
+int test_str_replace_char(test_arg) {
     Arena* a = arena_create(MiB(1));
     String *str = Q_STR(a, "Hello");
     int count = str_replace_char(str, 'e', 'l');
     t_assert(count == 1);
     t_assert(str->s[1] == 'l');
     arena_free(a);
-    return 0;
+    test_end
 }
 
-int test_str_clear() {
+int test_str_clear(test_arg) {
     Arena* a = arena_create(MiB(1));
     String *str = Q_STR(a, "hello");
     str_clear(str);
     t_assert(str->length == 0);
     arena_free(a);
-    return 0;
+    test_end
 }
 
-int test_str_cmp() {
+int test_str_cmp(test_arg) {
     String str1 = STR_LIT("hello");
     String str2 = STR_LIT("hello");
     String str3 = STR_LIT("hetlo");
@@ -119,17 +118,17 @@ int test_str_cmp() {
     t_assert(str_cmp(&str1, &str2));
     t_assert(!str_cmp(&str1, &str3));
     t_assert(!str_cmp(&str1, &str4));
-    return 0;
+    test_end
 }
 
 int main() {
     Tests_set ts = {__FILE__};
-    register_test(&ts, &(Test){test_str_append_string});
-    register_test(&ts, &(Test){test_str_clear});
-    register_test(&ts, &(Test){test_str_append});
-    register_test(&ts, &(Test){test_str_substring});
-    register_test(&ts, &(Test){test_str_concat});
-    register_test(&ts, &(Test){test_str_replace_char});
-    register_test(&ts, &(Test){test_str_cmp});
-    run_tests(&ts);
+    reg_test(ts, test_str_append_string);
+    reg_test(ts, test_str_clear);
+    reg_test(ts, test_str_append);
+    reg_test(ts, test_str_substring);
+    reg_test(ts, test_str_concat);
+    reg_test(ts, test_str_replace_char);
+    reg_test(ts, test_str_cmp);
+    return run_tests(&ts);
 }
