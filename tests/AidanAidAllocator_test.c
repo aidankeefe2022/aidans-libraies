@@ -7,9 +7,9 @@
 #include "../src/AidanArena.c"
 #include "../src/AidanString.c"
 #include "../src/AidanLinkedList.c"
-#include "Testing.h"
+#include "../include/AidanTesting.h"
 
-int testAlloc() {
+int testAlloc(test_arg) {
     struct aid_AidAllocator a = {0};
     i32 *i = aid_AidAlloc(&a, sizeof(i32));
     t_assert(i == a.mem.data[0])
@@ -18,10 +18,10 @@ int testAlloc() {
     *i = 4;
     t_assert(*i == 4);
     aid_AidReleaseAll(&a);
-    return 0;
+    test_end
 }
 
-int testRealloc() {
+int testRealloc(test_arg) {
     struct aid_AidAllocator a = {0};
     i32 *i = aid_AidAlloc(&a, sizeof(i32));
     i32 *y = aid_AidRealloc(&a, i, 2 * sizeof(i32));
@@ -31,17 +31,17 @@ int testRealloc() {
     *y = 4;
     t_assert(*y == 4);
     aid_AidReleaseAll(&a);
-    return 0;
+    test_end
 }
 
-int testFree() {
+int testFree(test_arg) {
     struct aid_AidAllocator a = {0};
     i32 *i = aid_AidAlloc(&a, sizeof(i32));
     t_assert(i == a.mem.data[0])
     aid_AidFreePtr(&a, i);
     t_assert(NULL == a.mem.data[0])
     aid_AidReleaseAll(&a);
-    return 0;
+    test_end
 }
 
 
