@@ -130,11 +130,8 @@ bool aid_collect_garbage(struct aid_LinkedList* ll) {
 }
 
 bool aid_free_LL(struct aid_LinkedList* ll){
-    while(ll->LOST_NODES){
-        struct aid_LLNode* node = ll->LOST_NODES;
-        ll->LOST_NODES = ll->LOST_NODES->next;
-        free(node);
-    }
+    if (!aid_collect_garbage(ll))
+        return false;
     while(ll->head){
         struct aid_LLNode* node = ll->head;
         ll->head= ll->head->next;
