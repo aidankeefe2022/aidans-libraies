@@ -206,7 +206,7 @@ int testIterate(test_arg){
 }
 
 int main(test_arg){
-	Tests_set ts = {__FILE__};
+	Tests_set ts = ts_init();
 	reg_test(ts, testPush);
 	reg_test(ts, testPop);
 	reg_test(ts, testCollectGarbage);

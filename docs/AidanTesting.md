@@ -39,8 +39,8 @@ no crash!
 Use `t_assert(expr)` for checks:
 
 ```c
-t_assert(ll.size == 1)
-t_assert(ll.head == ll.tail)
+t_assert(<expr>)
+t_assert(<expr>)
 ```
 
 If the expression is false:
@@ -48,6 +48,13 @@ If the expression is false:
 - the test prints a red `failed` message
 - `result` is set to `1`
 - execution continues unless you return early yourself
+
+If you want to fail on an assert and return early:
+
+```c
+t_assert_exit(<expr>)
+```
+
 
 To finish a test, use:
 
@@ -69,7 +76,7 @@ Create a `Tests_set` and register each test with `reg_test`:
 
 ```c
 int main(test_arg) {
-    Tests_set ts = {__FILE__};
+    Tests_set ts = ts_init();
     reg_test(ts, test1);
     reg_test(ts, test2);
     return run_tests(&ts);
@@ -109,20 +116,20 @@ This is the same overall pattern used in [tests/AidanLinkedList_test.c](/home/ai
 ```c
 #include "../include/AidanTesting.h"
 
-int testPush(test_arg) {
+int test1(test_arg) {
     int value = 42;
     t_assert(value == 42)
     test_end
 }
 
-int testPop(test_arg) {
+int test2(test_arg) {
     int value = 5;
     t_assert(value != 0)
     test_end
 }
 
 int main(test_arg) {
-    Tests_set ts = {__FILE__};
+    Tests_set ts = ts_init();
 
     reg_test(ts, testPush);
     reg_test(ts, testPop);
@@ -150,6 +157,7 @@ Tests Ran In: 0.000123 seconds
 ## Notes
 
 - `t_assert(...)` does not stop the test immediately. Multiple assertions in the same test can fail before `test_end` returns.
+- `t_assert_ext(...)` does stop the test immediately on a fail. 
 - `reg_test(...)` assumes the `Tests_set` variable is passed by name, not by pointer.
 - `run_tests(...)` consumes the internal `head` pointer while iterating, so the same `Tests_set` should not be reused for another run without rebuilding it.
 - The header currently defines implementation directly after the declaration section, so it behaves like a header-only utility.

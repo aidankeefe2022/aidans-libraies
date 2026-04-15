@@ -78,7 +78,8 @@ int test_str_substring(test_arg) {
 
 
 int test_str_concat(test_arg) {
-    Arena* a = arena_create(MiB(1));
+    Arena* a = arena_create(MiB(1));\
+    t_assert_exit(a)
     String str1 = STR_LIT("hello");
     String str2 = STR_LIT("hello");
     String* str3 = str_concat(a, &str1, &str2);

@@ -16,6 +16,7 @@
 #define t_assert(expr) if (!(expr)) {Fail()}
 #define test_arg int result
 #define test_end return result;
+#define t_assert_exit(expr) if (!(expr)) {Fail(); return result;}
 
 
 typedef enum test_err {
