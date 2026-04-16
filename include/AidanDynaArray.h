@@ -112,6 +112,5 @@ ArrayCreate(void*, void);
 
 
 #undef Array
-#undef aid_CONCAT
 
 #endif
