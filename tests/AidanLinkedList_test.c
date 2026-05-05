@@ -157,7 +157,7 @@ int test_string_type(test_arg) {
     test_end
 }
 
-int test_mixed_types_fail(test_arg) {
+int test_mixed_types(test_arg) {
     LinkedList ll = {0};
 
     u64 x = 5;
@@ -205,7 +205,28 @@ int testIterate(test_arg){
 	test_end
 }
 
-int main(test_arg){
+int testPopFirst(test_arg){
+    LinkedList ll ={0};
+    u64 i = 3;
+
+	aid_push(&ll, &i, U64);
+	aid_push(&ll, &i, U64);
+	aid_push(&ll, &i, U64);
+    
+    t_assert(ll.size == 3);
+    t_assert(aid_pop_first(&ll).U64 == 3);
+    t_assert(ll.size == 2);
+    t_assert(aid_pop_first(&ll).U64 == 3);
+    t_assert(ll.size == 1);
+    t_assert(aid_pop_first(&ll).U64 == 3);
+    t_assert(ll.size == 0);
+    t_assert(aid_pop_first(&ll).U64 == 0);
+
+    aid_free_LL(&ll);
+    test_end
+}
+
+int main(){
 	Tests_set ts = ts_init();
 	reg_test(ts, testPush);
 	reg_test(ts, testPop);
@@ -217,6 +238,7 @@ int main(test_arg){
     reg_test(ts, test_f64_type);
     reg_test(ts, test_voidptr_type);
     reg_test(ts, test_string_type);
-    reg_test(ts, test_mixed_types_fail);
+    reg_test(ts, test_mixed_types);
+    reg_test(ts, testPopFirst);
 	return run_tests(&ts);
 }
