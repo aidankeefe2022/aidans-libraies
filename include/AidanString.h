@@ -9,6 +9,14 @@
 #include <stdio.h>
 
 
+//specifially Strigns not allocated usign a stack allocator
+#ifdef AIDAN_DYNAMIC_STRINGS
+#define StringBump(String) if(str_incrcease_cap((String), default_incr_ammount * (String)->cap) == STRING_INCREASE_FAIL){ return STRING_INCREASE_FAIL; }
+#define StringBumpSpec(String, size) if(str_incrcease_cap((String), size) == STRING_INCREASE_FAIL){ return STRING_INCREASE_FAIL; }
+#else
+#define StringBump(String) return STRING_OVERFLOW;
+#define StringBumpSpec(String, size) return STRING_OVERFLOW;
+#endif
 
 #ifdef AIDAN_SHORT_NAMES
     #define String String

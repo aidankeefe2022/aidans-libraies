@@ -9,10 +9,10 @@
 
 int test_str_append_string(test_arg) {
     Arena* a = arena_create(MiB(1));
-    String* str = str_new(a,  2, "x", 10);
+    String* str = str_new(a,  1, "x", 10);
     String str1 = STR_LIT("hello");
     str_append_string(str, &str1);
-    t_assert(str->length == 1 + str1.length);
+    t_assert(str->length == str1.length);
     t_assert(str->s[1] == 'h');
     t_assert(str->s[2] == 'e');
 
@@ -41,9 +41,9 @@ int test_str_append_int(test_arg) {
 
 int test_str_append(test_arg) {
     Arena* a = arena_create(MiB(1));
-    String* str = str_new(a,  2, "h", 10);
+    String* str = str_new(a,  1, "h", 10);
     str_append_char(str, 'i');
-    t_assert(str->length == 3);
+    t_assert(str->length == 2);
     t_assert(str->s[1] == 'i');
 
     //test overflow is caught

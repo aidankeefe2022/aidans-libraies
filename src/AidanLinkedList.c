@@ -62,24 +62,8 @@ bool aid_push(struct aid_LinkedList* ll, void* val, enum aid_LLtype type){
 }
 
 struct aid_LLNode aid_pop(struct aid_LinkedList* ll){
-    struct aid_LLNode node = {0};
-    if (!ll->size){
-        return node;
-    }
-    node = *ll->tail;
-    node.next = nullptr;
-    node.prev = nullptr;
-    ll->tail->next = ll->LOST_NODES;
-    ll->LOST_NODES = ll->tail;
-    ll->num_lost_nodes++;
-    ll->size--;
-    if (ll->size == 0) {
-        ll->head = nullptr;
-        ll->tail = nullptr;
-    }else {
-        ll->tail = ll->tail->prev;
-        ll->tail->next = nullptr;
-    }
+
+    struct aid_LLNode node = aid_remove_index(ll,ll->size-1);
 
     
 #if !defined(MANUAL_COLLECT_LL_GARBAGE)
@@ -99,23 +83,30 @@ struct aid_LLNode aid_remove_index(struct aid_LinkedList* ll, i32 idx) {
     if (ll->size <= idx)
         return (struct aid_LLNode){0};
     struct aid_LLNode* node = ll->head;
-    for (i32 i = 0; i < idx; i++) {
+    for (i32 i = 0; i < idx && node; i++) {
         node = node->next;
-        if (!node)
-            return (struct aid_LLNode){0};
+    }
+    if (!node) {
+        return (struct aid_LLNode){0};
     }
     struct aid_LLNode* curNodeNextPtr = node->next;
-    if (node->prev)
+    if (node->prev) {
         node->prev->next = curNodeNextPtr;
-
+    }else {
+        ll->head = curNodeNextPtr;
+    }
     if (curNodeNextPtr) {
         curNodeNextPtr->prev = node->prev;
+    }else {
+        ll->tail = node->prev;
     }
     node->next = ll->LOST_NODES;
     ll->LOST_NODES = node;
     struct aid_LLNode retNode = *node;
     retNode.next = nullptr;
     retNode.prev = nullptr;
+    ll->size--;
+    ll->num_lost_nodes++;
     return retNode;
 }
 

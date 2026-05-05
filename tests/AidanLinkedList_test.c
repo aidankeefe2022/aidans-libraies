@@ -226,6 +226,25 @@ int testPopFirst(test_arg){
     test_end
 }
 
+int testRemoveIndex(test_arg) {
+	LinkedList ll = {0};
+	u64 i = 3;
+	f64 f = 3.14;
+
+	aid_push(&ll, &i, U64);
+	aid_push(&ll, &f, F64);
+	aid_push(&ll, &i, U64);
+
+	t_assert(ll.size == 3);
+	t_assert(aid_remove_index(&ll, 1).F64 == 3.14);
+	t_assert(ll.size == 2);
+	t_assert(ll.head->next == ll.tail);
+	t_assert(ll.tail->prev == ll.head);
+
+	aid_free_LL(&ll);
+	test_end
+}
+
 int main(){
 	Tests_set ts = ts_init();
 	reg_test(ts, testPush);
@@ -240,5 +259,6 @@ int main(){
     reg_test(ts, test_string_type);
     reg_test(ts, test_mixed_types);
     reg_test(ts, testPopFirst);
+    reg_test(ts, testRemoveIndex);
 	return run_tests(&ts);
 }

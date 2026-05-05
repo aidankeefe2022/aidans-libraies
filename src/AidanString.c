@@ -5,14 +5,7 @@
 
 constexpr f64 default_incr_ammount = 0.1;
 
-//specifially Strigns not allocated usign a stack allocator
-#ifdef AIDAN_DYNAMIC_STRINGS
-    #define StringBump(String) if(str_incrcease_cap((String), default_incr_ammount * (String)->cap) == STRING_INCREASE_FAIL){ return STRING_INCREASE_FAIL; }
-    #define StringBumpSpec(String, size) if(str_incrcease_cap((String), size) == STRING_INCREASE_FAIL){ return STRING_INCREASE_FAIL; }
-#else
-    #define StringBump(String) return STRING_OVERFLOW;
-    #define StringBumpSpec(String, size) return STRING_OVERFLOW;
-#endif
+
 
 enum aid_str_err aid_str_incrcease_cap(struct aid_string* s, u64 incr_size){
     s->cap = s->cap + incr_size;
@@ -28,7 +21,7 @@ enum aid_str_err aid_str_append_char(struct aid_string* s, char character) {
     if (s->length == s->cap) {
         StringBump(s)
     }
-    s->s[s->length-1] = character;
+    s->s[s->length] = character;
     s->length++;
     return STRING_SUCCESS;
 }
@@ -53,7 +46,7 @@ enum aid_str_err aid_str_append_string(struct aid_string* str1, struct aid_strin
         StringBumpSpec(str1, str2->length)
     }
     for (int i = 0; i < str2->length; i++) {
-        str1->s[str1->length-1 + i] = str2->s[i];
+        str1->s[str1->length + i] = str2->s[i];
     }
     str1->length = str2->length + str1->length - 1;
     return STRING_SUCCESS;
