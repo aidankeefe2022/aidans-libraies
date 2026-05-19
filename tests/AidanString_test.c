@@ -12,7 +12,7 @@ int test_str_append_string(test_arg) {
     String* str = str_new(a,  1, "x", 10);
     String* str1 = Q_STR(a,"hello");
     str_append_string(str, str1);
-    t_assert(str->length == str1->length);
+    t_assert(str->length == str1->length+1);
     t_assert(str->s[1] == 'h');
     t_assert(str->s[2] == 'e');
 
@@ -81,7 +81,7 @@ int test_str_append_string_auto_resize(test_arg) {
 
     t_assert(str_append_string(&str, &suffix) == STRING_SUCCESS);
     t_assert(str.cap == 5);
-    t_assert(str.length == suffix.length-1);
+    t_assert(str.length == suffix.length);
     t_assert(str.s[0] == 'h');
     t_assert(str.s[4] == 'o');
 

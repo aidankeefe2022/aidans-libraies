@@ -7,7 +7,8 @@ constexpr f64 default_incr_amount = 0.1;
 
 #define resize(string, additionalSpace) do{\
         if (string->options & AID_STR_AUTO_RESIZE){\
-            aid_str_incrcease_cap(string, additionalSpace);   \
+            if(aid_str_incrcease_cap(string, additionalSpace) == STRING_INCREASE_FAIL)   \
+                return STRING_INCREASE_FAIL;\
         }else{\
             return STRING_OVERFLOW;\
         }\
@@ -55,7 +56,7 @@ enum aid_str_err aid_str_append_string(struct aid_string* str1, struct aid_strin
     for (int i = 0; i < str2->length; i++) {
         str1->s[str1->length + i] = str2->s[i];
     }
-    str1->length = str2->length + str1->length - 1;
+    str1->length = str2->length + str1->length;
     return STRING_SUCCESS;
 }
 
