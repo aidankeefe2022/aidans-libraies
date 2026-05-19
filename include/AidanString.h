@@ -35,8 +35,8 @@ typedef struct aid_string {
     char* s;
 }String;
 
-#define STR_LIT(STR) (String){sizeof(STR), sizeof(STR), 0, STR}
-#define Q_STR(Arena,STR) str_new(Arena, sizeof(STR), STR, sizeof(STR))
+#define STR_LIT(STR) (String){sizeof(STR)-1, sizeof(STR)-1, 0, STR}
+#define Q_STR(Arena,STR) str_new(Arena, sizeof(STR)-1, STR, sizeof(STR)-1)
 
 str_err aid_str_incrcease_cap(String* s, u64 incr_size);
 str_err aid_str_append_char(String* s, char character);

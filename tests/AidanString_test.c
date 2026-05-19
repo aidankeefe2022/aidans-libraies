@@ -80,7 +80,7 @@ int test_str_append_string_auto_resize(test_arg) {
     str.options = AID_STR_AUTO_RESIZE;
 
     t_assert(str_append_string(&str, &suffix) == STRING_SUCCESS);
-    t_assert(str.cap == 6);
+    t_assert(str.cap == 5);
     t_assert(str.length == suffix.length-1);
     t_assert(str.s[0] == 'h');
     t_assert(str.s[4] == 'o');
@@ -135,7 +135,7 @@ int test_str_concat(test_arg) {
     String str2 = STR_LIT("hello");
     String* str3 = str_concat(a, &str1, &str2);
 
-    t_assert(str3->length == 11);
+    t_assert(str3->length == 10);
     t_assert(str3->s[9] == 'o');
     t_assert(str3->s[0] == 'h');
     arena_free(a);

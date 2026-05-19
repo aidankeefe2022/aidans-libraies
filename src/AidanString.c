@@ -114,11 +114,11 @@ struct aid_string* aid_str_concat(struct aid_arena* arena, struct aid_string* st
         printf("Could not allocate memory for string concat.");
         return nullptr;
     }
-    u64 idx = str1->length-1;
-    for (u64 i = 0; i < str2->length; i++) {
+    u64 idx = str1->length;
+    for (u64 i = 0; i <= str2->length; i++) {
         result->s[idx++] = str2->s[i];
     }
-    result->length += str2->length-1;
+    result->length += str2->length;
     return result;
 }
 
