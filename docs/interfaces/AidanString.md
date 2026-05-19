@@ -1,4 +1,12 @@
 # AidanString Interface
+## Options
+
+```c++
+#define AIDAN_SHORT_NAMES 
+#include <LibAidan/AidanAidAllocator.h>
+```
+
+this provides Api macros with our aid_ prefix.
 
 ## Types
 - `String` (`aid_String`): `cap`, `length`, `char* chars`

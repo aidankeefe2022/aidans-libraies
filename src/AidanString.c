@@ -3,13 +3,19 @@
 //
  #include <AidanString.h>
 
-constexpr f64 default_incr_ammount = 0.1;
+constexpr f64 default_incr_amount = 0.1;
 
-
+#define resize(string, additionalSpace) do{\
+        if (string->options & AID_STR_AUTO_RESIZE){\
+            aid_str_incrcease_cap(string, additionalSpace);   \
+        }else{\
+            return STRING_OVERFLOW;\
+        }\
+    }while (0)
 
 enum aid_str_err aid_str_incrcease_cap(struct aid_string* s, u64 incr_size){
     s->cap = s->cap + incr_size;
-    void* new_ptr;
+    char* new_ptr;
     if((new_ptr = realloc(s->s, s->cap)) != nullptr){
         s->s = new_ptr;
         return STRING_SUCCESS;
@@ -19,7 +25,7 @@ enum aid_str_err aid_str_incrcease_cap(struct aid_string* s, u64 incr_size){
 
 enum aid_str_err aid_str_append_char(struct aid_string* s, char character) {
     if (s->length == s->cap) {
-        StringBump(s)
+        resize(s, 10);
     }
     s->s[s->length] = character;
     s->length++;
@@ -29,8 +35,9 @@ enum aid_str_err aid_str_append_char(struct aid_string* s, char character) {
 enum aid_str_err aid_str_append_int(struct aid_string* s, i64 num) {
     char buffer[22];
     int length = snprintf(buffer, sizeof(buffer), "%ld", num);
-    if (s->length + length > s->cap) {
-        StringBumpSpec(s, length)
+    bool resize = s->options & AID_STR_AUTO_RESIZE;
+    if (s->length + length > s->cap && resize) {
+        resize(s, length+2);
     }
     for (u16 i = 0; i < length; i++) {
         s->s[s->length-1 + i] = buffer[i];
@@ -43,7 +50,7 @@ enum aid_str_err aid_str_append_int(struct aid_string* s, i64 num) {
 
 enum aid_str_err aid_str_append_string(struct aid_string* str1, struct aid_string* str2) {
     if (str1->length + str2->length > str1->cap) {
-        StringBumpSpec(str1, str2->length)
+        resize(str1, str2->length);
     }
     for (int i = 0; i < str2->length; i++) {
         str1->s[str1->length + i] = str2->s[i];
@@ -73,6 +80,7 @@ struct aid_string* aid_str_new(struct aid_arena* arena, u64 length, char str[len
 
     result->s = new_string;
     result->length = length;
+    result->options = 0;
     result->cap = cap;
     return result;
 }

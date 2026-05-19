@@ -31,83 +31,51 @@ ArrayCreate(i64, i64);
 ArrayCreate(struct aid_string*, string);
 ArrayCreate(void*, void);
 
-#ifdef AIDAN_SHORT_NAMES
-#define arr_incr_cap_cust(arr, n, reallocator) do{ \
-    if ((&arr)->len >= (&arr)->cap) { \
-        (&arr)->cap += n; \
-        void* temp = reallocator((&arr)->data, (&arr)->cap*sizeof(*((&arr)->data))); \
-        if(temp){\
-            (&arr)->data = temp; \
-        }else{\
-            (&arr)->cap -= n;\
-        }\
-    }\
-}while(0);
-#define arr_push_cust(arr,v, reallocator) do{\
-    if (((&arr)->len+1) >= (&arr)->cap) { \
-        arr_incr_cap((arr), 10, reallocator); \
-    }\
-    (&arr)->data[(&arr)->len++] = v; \
-    }while(0);
-#define arr_incr_cap(arr, n) do{ \
-    if ((&arr)->len >= (&arr)->cap) { \
-        (&arr)->cap += n; \
-        void* temp = realloc((&arr)->data, (&arr)->cap*sizeof(*((&arr)->data)));\
-        if(temp){\
-            (&arr)->data = temp;\
-        }else{\
-            (&arr)->cap -= n;\
-        }\
-    }\
-}while(0);
-#define arr_push(arr,v) do{\
-    if (((&arr)->len+1) >= (&arr)->cap) { \
-        arr_incr_cap((arr), 10); \
-    }\
-    (&arr)->data[(&arr)->len++] = v; \
-    }while(0);
-#define arr_pop(arr) (&arr)->data[(--((&arr)->len))]
-#endif
-
-
 #define aid_arr_incr_cap_cust(arr, n, reallocator) do{ \
-    if ((&arr)->len >= (&arr)->cap) { \
-        (&arr)->cap += n; \
-        void* temp = reallocator((&arr)->data, (&arr)->cap*sizeof(*((&arr)->data))); \
+    if ((arr).len >= (arr).cap) { \
+        (arr).cap += n; \
+        void* temp = reallocator((arr).data, (arr).cap*sizeof(*((arr).data))); \
         if(temp){\
-            (&arr)->data = temp; \
+            (arr).data = temp; \
         }else{\
-            (&arr)->cap -= n;\
+            (arr).cap -= n;\
         }\
     }\
 }while(0);
-
 #define aid_arr_push_cust(arr,v, reallocator) do{\
-    if (((&arr)->len+1) >= (&arr)->cap) { \
-        aid_arr_incr_cap((arr), 10, reallocator); \
+    if (((arr).len+1) >= (arr).cap) { \
+        aid_arr_incr_cap_cust((arr), 10, reallocator); \
     }\
-    (&arr)->data[(&arr)->len++] = v; \
+    (arr).data[(arr).len++] = v; \
     }while(0);
-
 #define aid_arr_incr_cap(arr, n) do{ \
-    if ((&arr)->len >= (&arr)->cap) { \
-        (&arr)->cap += n; \
-        void* temp = realloc((&arr)->data, (&arr)->cap*sizeof(*((&arr)->data))); \
+    if ((arr).len >= (arr).cap) { \
+        (arr).cap += n; \
+        void* temp = realloc((arr).data, (arr).cap*sizeof(*((arr).data)));\
         if(temp){\
-            (&arr)->data = temp; \
+            (arr).data = temp;\
         }else{\
-            (&arr)->cap -= n;\
+            (arr).cap -= n;\
         }\
     }\
 }while(0);
-
 #define aid_arr_push(arr,v) do{\
-    if (((&arr)->len+1) >= (&arr)->cap) { \
+    if (((arr).len+1) >= (arr).cap) { \
         aid_arr_incr_cap((arr), 10); \
     }\
-    (&arr)->data[(&arr)->len++] = v; \
+    (arr).data[(arr).len++] = v; \
     }while(0);
-#define aid_arr_pop(arr) (&(arr)->data[(--((&(arr)->len))]
+#define aid_arr_pop(arr)  ((arr).len ? (arr).data[--(arr).len] : (arr).data[arr.len-1])
+
+
+
+#ifdef AIDAN_SHORT_NAMES
+#define arr_incr_cap_cust(arr, n, reallocator) aid_arr_incr_cap_cust((arr), (n), reallocator)
+#define arr_push_cust(arr,v, reallocator) aid_arr_push_cust((arr), (v), reallocator)
+#define arr_incr_cap(arr, n) aid_arr_incr_cap((arr), (n))
+#define arr_push(arr,v) aid_arr_push((arr), (v))
+#define arr_pop(arr) aid_arr_pop((arr))
+#endif
 
 
 

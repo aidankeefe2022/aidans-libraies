@@ -1,5 +1,14 @@
 # AidanAidAllocator Interface
 
+## Options
+
+```c++
+#define AIDAN_SHORT_NAMES 
+#include <LibAidan/AidanAidAllocator.h>
+```
+
+this provides Api macros with our aid_ prefix.
+
 ## Types
 - `AidAllocator_t` (`aid_AidAllocator`): tracked allocations + free-list backed allocator
 

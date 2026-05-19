@@ -10,15 +10,15 @@
 int test_str_append_string(test_arg) {
     Arena* a = arena_create(MiB(1));
     String* str = str_new(a,  1, "x", 10);
-    String str1 = STR_LIT("hello");
-    str_append_string(str, &str1);
-    t_assert(str->length == str1.length);
+    String* str1 = Q_STR(a,"hello");
+    str_append_string(str, str1);
+    t_assert(str->length == str1->length);
     t_assert(str->s[1] == 'h');
     t_assert(str->s[2] == 'e');
 
-    String test_str2 = STR_LIT("hello");
-    String test_str3 = STR_LIT("hello");
-    t_assert(str_append_string(&test_str2, &test_str3) == STRING_OVERFLOW);
+    String* test_str2 = Q_STR(a, "hello");
+    String* test_str3 = Q_STR(a, "hello");
+    t_assert(str_append_string(test_str2, test_str3) == STRING_OVERFLOW);
     arena_free(a);
     test_end
 }
@@ -55,6 +55,57 @@ int test_str_append(test_arg) {
 
 
     arena_free(a);
+    test_end
+}
+
+int test_str_append_auto_resize_char(test_arg) {
+    Arena* a = arena_create(MiB(1));
+    String str = {0};
+    str.options = AID_STR_AUTO_RESIZE;
+
+    t_assert(str_append_char(&str, 'i') == STRING_SUCCESS);
+    t_assert(str.cap == 10);
+    t_assert(str.length == 1);
+    t_assert(str.s[0] == 'i');
+
+    arena_free(a);
+    free(str.s);
+    test_end
+}
+
+int test_str_append_string_auto_resize(test_arg) {
+    Arena* a = arena_create(MiB(1));
+    String str = {0};
+    String suffix = STR_LIT("hello");
+    str.options = AID_STR_AUTO_RESIZE;
+
+    t_assert(str_append_string(&str, &suffix) == STRING_SUCCESS);
+    t_assert(str.cap == 6);
+    t_assert(str.length == suffix.length-1);
+    t_assert(str.s[0] == 'h');
+    t_assert(str.s[4] == 'o');
+
+    arena_free(a);
+    free(str.s);
+    test_end
+}
+
+
+
+int test_str_append_int_auto_resize(test_arg) {
+    Arena* a = arena_create(MiB(1));
+    String str = {0};
+    u64 x = 1234;
+    str.options = AID_STR_AUTO_RESIZE;
+
+    t_assert(str_append_int(&str, x) == STRING_SUCCESS);
+    t_assert(str.cap == 4);
+    t_assert(str.length == 4);
+    t_assert(str.s[0] == '1');
+    t_assert(str.s[3] == '4');
+
+    arena_free(a);
+    free(str.s);
     test_end
 }
 
@@ -127,6 +178,8 @@ int main() {
     reg_test(ts, test_str_append_string);
     reg_test(ts, test_str_clear);
     reg_test(ts, test_str_append);
+    reg_test(ts, test_str_append_auto_resize_char);
+    reg_test(ts, test_str_append_string_auto_resize);
     reg_test(ts, test_str_substring);
     reg_test(ts, test_str_concat);
     reg_test(ts, test_str_replace_char);

@@ -10,13 +10,6 @@
 
 
 //specifially Strigns not allocated usign a stack allocator
-#ifdef AIDAN_DYNAMIC_STRINGS
-#define StringBump(String) if(str_incrcease_cap((String), default_incr_ammount * (String)->cap) == STRING_INCREASE_FAIL){ return STRING_INCREASE_FAIL; }
-#define StringBumpSpec(String, size) if(str_incrcease_cap((String), size) == STRING_INCREASE_FAIL){ return STRING_INCREASE_FAIL; }
-#else
-#define StringBump(String) return STRING_OVERFLOW;
-#define StringBumpSpec(String, size) return STRING_OVERFLOW;
-#endif
 
 #ifdef AIDAN_SHORT_NAMES
     #define String String
@@ -33,15 +26,16 @@ typedef enum aid_str_err {
     STRING_INCREASE_FAIL,
 }str_err;
 
-
+#define AID_STR_AUTO_RESIZE 1
 
 typedef struct aid_string {
     u64 cap;//must be the size of the s char array;
     u64 length;
+    u64 options;
     char* s;
 }String;
 
-#define STR_LIT(STR) (String){sizeof(STR), sizeof(STR), STR}
+#define STR_LIT(STR) (String){sizeof(STR), sizeof(STR), 0, STR}
 #define Q_STR(Arena,STR) str_new(Arena, sizeof(STR), STR, sizeof(STR))
 
 str_err aid_str_incrcease_cap(String* s, u64 incr_size);

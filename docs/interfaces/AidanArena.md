@@ -1,5 +1,15 @@
 # AidanArena Interface
 
+## Options
+
+```c++
+#define AIDAN_SHORT_NAMES 
+#include <LibAidan/AidanAidAllocator.h>
+```
+
+this provides Api macros with our aid_ prefix.
+
+
 ## Types
 - `Arena`: linear allocator state (`buffer`, `currentPointer`, `size`)
 - `ARENA_STATUS`: `ARENA_OK`, `ARENA_ALLOCATION_ERROR`, `ARENA_CREATION_ERROR`

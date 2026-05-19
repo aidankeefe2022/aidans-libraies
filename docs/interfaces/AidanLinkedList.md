@@ -1,5 +1,14 @@
 # AidanLinkedList Interface
 
+## Options
+
+```c++
+#define AIDAN_SHORT_NAMES 
+#include <LibAidan/AidanAidAllocator.h>
+```
+
+this provides Api macros with our aid_ prefix.
+
 ## Types
 - `LLtype`: `NOT_INIT`, `STRING`, `U64`, `I64`, `F32`, `F64`, `VOIDPTR`
 - `Node` (`aid_LLNode`): value union + type + `next`
